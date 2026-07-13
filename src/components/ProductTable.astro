@@ -1,0 +1,55 @@
+---
+export interface Props {
+  headers?: string[];
+  rows?: { cells: string[] }[];
+}
+
+const { headers, rows } = Astro.props;
+
+const safeHeaders = Array.isArray(headers) ? headers : [];
+const safeRows = Array.isArray(rows) ? rows : [];
+
+const defaultHeaders = [
+  "Koodi",
+  "Pituus",
+  "Leveys",
+  "Nousu",
+  "Pinta-ala",
+  "Tilavuus",
+];
+const displayHeaders = safeHeaders.length > 0 ? safeHeaders : defaultHeaders;
+---
+
+{
+  safeRows.length > 0 ? (
+    <div class="overflow-x-auto border border-dark my-8">
+      <table class="min-w-full divide-y divide-gray-200 text-sm">
+        <thead class="bg-light border-b border-dark text-dark">
+          <tr>
+            {displayHeaders.map((header) => (
+              <th
+                scope="col"
+                class="px-4 py-3 text-left font-semibold uppercase tracking-wider whitespace-nowrap"
+              >
+                {header}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 bg-white">
+          {safeRows.map((row, rowIndex) => (
+            <tr class={rowIndex % 2 === 0 ? "bg-white" : "bg-light"}>
+              {displayHeaders.map((_, colIndex) => (
+                <td class="px-4 py-3 text-gray-700 whitespace-nowrap">
+                  {row.cells?.[colIndex] || ""}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <p class="text-gray-500 italic my-8">Teknisiä tietoja ei ole lisätty.</p>
+  )
+}

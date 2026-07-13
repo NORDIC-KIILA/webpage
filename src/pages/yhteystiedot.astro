@@ -1,0 +1,463 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { client } from "../lib/sanity";
+import ContactCard from "../components/ContactCard.astro";
+
+const pageTitle = "Ota yhteyttä";
+const pageDescription =
+  "Ota yhteyttä Nordic Kiilaan ja pyydä kohdekohtainen suunnitelma ja tarjous. Täytä yhteydenottolomake, niin otamme sinuun yhteyttä mahdollisimman pian.";
+const pageImage = "/images/og-image.jpg";
+const canonical = "https://nordic-kiila.fi/yhteystiedot";
+const robotsContent = "index, follow";
+
+const categories =
+  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current)]{
+  title,
+  "slug": slug.current,
+  "products": *[_type == "product" && isHidden != true && defined(slug.current) && references(^._id)]{
+    title,
+    "slug": slug.current
+  }
+} | order(title asc)`);
+
+const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
+  name,
+  jobtitle,
+  email,
+  phone,
+  image
+} | order(name asc)`);
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Fragment slot="head">
+    <meta name="robots" content={robotsContent} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={pageImage} />
+    <meta property="og:url" content={canonical} />
+  </Fragment>
+  <main class="main main-padding">
+    <div
+      class="grid grid-cols-1 lg:grid-cols-2 items-start justify-between gap-10 lg:gap-20 px-1 md:px-5"
+    >
+      <div class="w-full col-span-1">
+        <div class="mb-8">
+          <h1 class="h1">Yhteystiedot</h1>
+          <p class="text-lg max-w-140 mt-4">
+            Pyydä kohdekohtainen suunnitelma ja tarjous. Soita meille tai täytä
+            yhteydenottolomake, niin otamme sinuun yhteyttä mahdollisimman pian.
+          </p>
+        </div>
+        <div
+          class="bg-light border border-dark p-6 shadow-sm text-dark flex flex-col items-center justify-center"
+        >
+          <p
+            class="font-semibold mb-2 text-center lg:text-left font-heading text-3xl"
+          >
+            Soita meille
+          </p>
+          <a
+            href="tel:+358123456789"
+            class="text-4xl font-semibold text-dark hover:text-accent transition-colors flex items-center gap-2 font-heading"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-7 h-7"
+              fill="currentColor"
+              aria-hidden="true"
+              viewBox="0 0 256 256"
+              ><path
+                d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"
+              ></path>
+            </svg>
+            +358 12 345 6789
+          </a>
+          <p class="text-md text-gray-600 mt-2">Soittoajat: Ma–Pe 8:00–16:00</p>
+        </div>
+        <div
+          class="text-center mx-auto mt-9 text-xl font-bold text-dark lg:hidden"
+        >
+          TAI
+        </div>
+      </div>
+      {
+        contacts.length > 0 && (
+          <div class="order-last mt-2 md:mt-5 lg:mt-0">
+            <h2 class="h2 mb-3">Yhteyshenkilöt</h2>
+            <ul class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+              {contacts.map((c: any) => (
+                <li>
+                  <ContactCard {...c} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      <div class="w-full lg:mt-20 row-span-2" id="form-container">
+        <form
+          name="contact"
+          method="POST"
+          data-netlify="true"
+          netlify-honeypot="company_id"
+          class="space-y-4 bg-light border border-dark shadow-md px-4 md:px-10 pb-12 pt-8"
+        >
+          <h2
+            class="font-semibold mb-7 text-dark text-center lg:text-left font-heading text-3xl"
+          >
+            Täytä yhteydenottolomake
+          </h2>
+          <input type="hidden" name="form-name" value="contact" />
+
+          <div class="absolute left-[-9999px]" aria-hidden="true">
+            <label for="company_id">Yritystunnus</label>
+            <input
+              type="text"
+              id="company_id"
+              name="company_id"
+              tabindex="-1"
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label
+                for="firstname"
+                class="block text-sm font-medium text-dark mb-1"
+              >
+                Etunimi <span aria-hidden="true" class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="firstname"
+                name="firstname"
+                required
+                aria-required="true"
+                autocomplete="name"
+                class="w-full px-3 py-2 border border-dark/20 bg-white text-dark font-main text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
+              />
+            </div>
+            <div>
+              <label
+                for="lastname"
+                class="block text-sm font-medium text-dark mb-1"
+              >
+                Sukunimi <span aria-hidden="true" class="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                id="lastname"
+                name="lastname"
+                required
+                aria-required="true"
+                autocomplete="name"
+                class="w-full px-3 py-2 border border-dark/20 bg-white text-dark font-main text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label
+              for="company"
+              class="block text-sm font-medium text-dark mb-1"
+            >
+              Yritysnimi (valinnainen)
+            </label>
+            <input
+              type="text"
+              id="company"
+              name="company"
+              aria-required="false"
+              autocomplete="organization"
+              class="w-full px-3 py-2 border border-dark/20 bg-white text-dark font-main text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label
+                for="phone"
+                class="block text-sm font-medium text-dark mb-1"
+              >
+                Puhelin <span aria-hidden="true" class="text-red-500">*</span>
+              </label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                required
+                aria-required="true"
+                autocomplete="tel"
+                class="w-full px-3 py-2 border border-dark/20 bg-white text-dark font-main text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
+              />
+            </div>
+
+            <div>
+              <label
+                for="email"
+                class="block text-sm font-medium text-dark mb-1"
+              >
+                Sähköposti <span aria-hidden="true" class="text-red-500">*</span
+                >
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                aria-required="true"
+                autocomplete="email"
+                class="w-full px-3 py-2 border border-dark/20 bg-white text-dark font-main text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent"
+              />
+            </div>
+          </div>
+
+          <fieldset class="border border-dark/20 p-4 rounded mt-5">
+            <legend class="font-semibold text-dark px-2 text-sm">
+              Mistä tuotteista olet kiinnostunut? (valinnainen)
+            </legend>
+            <div id="product-selections" class="space-y-3"></div>
+            <button
+              type="button"
+              id="add-product-btn"
+              class="btn-secondary mt-3 text-sm"
+            >
+              + Lisää tuote
+            </button>
+          </fieldset>
+
+          <input type="hidden" name="products" id="products-field" />
+
+          <div>
+            <label
+              for="message"
+              class="block text-sm font-medium text-dark mb-1"
+            >
+              Viesti <span aria-hidden="true" class="text-red-500">*</span>
+            </label>
+            <textarea
+              id="message"
+              name="message"
+              required
+              aria-required="true"
+              rows="5"
+              class="w-full px-3 py-2 border border-dark/20 bg-white text-dark font-main text-sm focus:outline-none focus:ring-2 focus:ring-accent focus:border-accent resize-y min-h-32"
+            ></textarea>
+          </div>
+
+          <button type="submit" class="btn-primary w-full">Lähetä</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <script define:vars={{ categories }}>
+    const categoriesData = categories;
+    let groupCounter = 0;
+    const selections = new Map();
+
+    function init() {
+      handleUrlParams();
+      setupEventListeners();
+    }
+
+    function handleUrlParams() {
+      const params = new URLSearchParams(window.location.search);
+      for (const [categorySlug, productSlug] of params) {
+        const category = categoriesData.find((c) => c.slug === categorySlug);
+        if (category && category.products.some((p) => p.slug === productSlug)) {
+          const groupId = addSelectionGroup();
+          selectCategory(groupId, categorySlug);
+          toggleProduct(groupId, productSlug, true);
+        }
+      }
+    }
+
+    function setupEventListeners() {
+      document
+        .getElementById("add-product-btn")
+        .addEventListener("click", () => {
+          addSelectionGroup();
+        });
+
+      const form = document.querySelector('form[name="contact"]');
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        const response = await fetch(window.location.pathname, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams(formData).toString(),
+        });
+        if (response.ok) {
+          document.getElementById("form-container").innerHTML = `
+            <div class="bg-light border border-accent p-8 text-center space-y-3">
+              <svg class="w-12 h-12 mx-auto text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <h2 class="h2">Kiitos viestistäsi!</h2>
+              <p>Olemme sinuun yhteydessä mahdollisimman pian.</p>
+            </div>
+          `;
+        }
+      });
+    }
+
+    function addSelectionGroup() {
+      const groupId = `group-${groupCounter++}`;
+      selections.set(groupId, { categorySlug: "", productSlugs: new Set() });
+
+      const container = document.getElementById("product-selections");
+      const groupEl = document.createElement("div");
+      groupEl.id = groupId;
+      groupEl.className = "bg-[#dfeaec] border border-dark/10 rounded p-3";
+
+      const categoriesOptions = categoriesData
+        .map((c) => `<option value="${c.slug}">${c.title}</option>`)
+        .join("");
+
+      groupEl.innerHTML = `
+        <div class="flex items-center gap-2">
+          <label for="${groupId}-select" class="sr-only">Valitse kategoria</label>
+          <select
+            id="${groupId}-select"
+            class="category-select flex-1 px-2 py-1.5 border border-dark/20 bg-white text-dark font-main text-sm focus:outline-none focus:ring-2 focus:ring-accent"
+          >
+            <option value="">Valitse kategoria</option>
+            ${categoriesOptions}
+          </select>
+          <button
+            type="button"
+            class="remove-group-btn p-1.5 text-dark/60 hover:text-dark hover:bg-dark/10 rounded transition-colors"
+            aria-label="Poista valinta"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+          </button>
+        </div>
+        <div class="products-container hidden mt-2"></div>
+      `;
+
+      const select = groupEl.querySelector(".category-select");
+      select.addEventListener("change", (e) => {
+        selectCategory(groupId, e.target.value);
+      });
+
+      const removeBtn = groupEl.querySelector(".remove-group-btn");
+      removeBtn.addEventListener("click", () => {
+        removeSelectionGroup(groupId);
+      });
+
+      container.appendChild(groupEl);
+
+      return groupId;
+    }
+
+    function selectCategory(groupId, categorySlug) {
+      const selection = selections.get(groupId);
+      selection.categorySlug = categorySlug;
+      selection.productSlugs.clear();
+
+      const groupEl = document.getElementById(groupId);
+      const select = groupEl.querySelector(".category-select");
+      select.value = categorySlug;
+
+      const productsContainer = groupEl.querySelector(".products-container");
+
+      if (!categorySlug) {
+        productsContainer.classList.add("hidden");
+        productsContainer.innerHTML = "";
+        updateProductsField();
+        return;
+      }
+
+      const category = categoriesData.find((c) => c.slug === categorySlug);
+      if (!category || !category.products.length) {
+        productsContainer.classList.add("hidden");
+        productsContainer.innerHTML = "";
+        updateProductsField();
+        return;
+      }
+
+      productsContainer.innerHTML = `
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1">
+          ${category.products
+            .map(
+              (p) => `
+            <label class="flex items-center gap-2 py-1 px-2 cursor-pointer hover:bg-dark/5 rounded transition-colors">
+              <input
+                type="checkbox"
+                value="${p.slug}"
+                class="product-checkbox accent-accent"
+              />
+              <span class="text-sm text-dark">${p.title}</span>
+            </label>
+          `,
+            )
+            .join("")}
+        </div>
+      `;
+
+      productsContainer.classList.remove("hidden");
+
+      productsContainer.querySelectorAll(".product-checkbox").forEach((cb) => {
+        cb.addEventListener("change", (e) => {
+          toggleProduct(groupId, e.target.value, e.target.checked);
+        });
+      });
+
+      updateProductsField();
+    }
+
+    function toggleProduct(groupId, productSlug, checked) {
+      const selection = selections.get(groupId);
+      if (checked) {
+        selection.productSlugs.add(productSlug);
+      } else {
+        selection.productSlugs.delete(productSlug);
+      }
+
+      const groupEl = document.getElementById(groupId);
+      const checkbox = groupEl.querySelector(
+        `input.product-checkbox[value="${productSlug}"]`,
+      );
+      if (checkbox) {
+        checkbox.checked = checked;
+      }
+
+      updateProductsField();
+    }
+
+    function removeSelectionGroup(groupId) {
+      selections.delete(groupId);
+      document.getElementById(groupId).remove();
+      updateProductsField();
+    }
+
+    function updateProductsField() {
+      const lines = [];
+      for (const [groupId, selection] of selections) {
+        if (selection.categorySlug && selection.productSlugs.size > 0) {
+          const category = categoriesData.find(
+            (c) => c.slug === selection.categorySlug,
+          );
+          const productNames = Array.from(selection.productSlugs).map(
+            (slug) => {
+              const product = category.products.find((p) => p.slug === slug);
+              return product ? product.title : slug;
+            },
+          );
+          lines.push(`${category.title}: ${productNames.join(", ")}`);
+        }
+      }
+      document.getElementById("products-field").value = lines.join("\n");
+    }
+
+    init();
+  </script>
+</Layout>

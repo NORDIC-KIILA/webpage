@@ -1,0 +1,137 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+import { client } from "../lib/sanity";
+
+const categories =
+  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current)]{
+  title,
+  "slug": slug.current,
+  seo {
+    description,
+    "imageUrl": image.asset->url,
+  },
+} | order(title asc)`);
+
+const siteUrl = "https://nordickiila.fi";
+const pageTitle = "Etusivu";
+const pageDescription = "Nordic Kiila - Asiantuntevat vesikaton ratkaisut";
+const pageImage = `${siteUrl}/default-og-image.jpg`;
+const canonical = `${siteUrl}`;
+const robotsContent = "index, follow";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Fragment slot="head">
+    <meta name="robots" content={robotsContent} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={pageImage} />
+    <meta property="og:url" content={canonical} />
+  </Fragment>
+  <main class="scroll-smooth">
+    <section
+      class="relative bg-white h-auto md:h-120 lg:h-auto flex flex-col gap-0 bg-dot w-full max-w-[1600px] mx-auto"
+    >
+      <div
+        class="relative lg:top-20 lg:left-20 flex flex-col gap-2 w-fit items-start p-10"
+      >
+        <h1 class="h1 leading-15 mb-3">Asiantuntevat vesikaton ratkaisut</h1>
+        <p class="max-w-180">
+          Olemme erikoistuneet moderneihin ja keveisiin kattoratkaisuihin.
+          Valmistamme kohteeseesi räätälöidyt kiilat, profiilit sekä
+          rappauslistat materiaalihukka minimoiden. Valitset tarpeidesi mukaan
+          materiaaliksi EPS, PIR tai villa. Me hoidamme optimoinnin sekä
+          suunnittelun puolestasi. Säästät kustannuksissa sekä ajassa.
+        </p>
+        <div class="flex flex-row gap-4 mt-5">
+          <a href="#tuoteratkaisut" class="btn-primary">Tuotteet</a>
+          <a href="#suunnittelupalvelu" class="btn-primary">Suunnittelu</a>
+        </div>
+      </div>
+      <div
+        class="relative md:absolute md:inset-0 lg:relative bg-light w-full mt-auto h-50 md:h-50 lg:h-70 flex items-center justify-center text-black font-bold"
+        style="clip-path: polygon(0 60%, 100% 0, 100% 100%, 0 100%);"
+      >
+        <p>Kuvat tulossa</p>
+      </div>
+    </section>
+
+    <section id="tuoteratkaisut" class="main my-10 px-8">
+      <h2 class="h2 mb-5">Tuoteratkaisut</h2>
+      <ul class="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-15 items-stretch">
+        {
+          categories.map((cat: any) => (
+            <li>
+              <Card
+                title={cat.title}
+                text={cat.seo.description}
+                image={cat.seo?.imageUrl}
+                link={{
+                  url: `/kategoria/${cat.slug}`,
+                }}
+              />
+            </li>
+          ))
+        }
+        <li class="hidden">
+          <Card
+            title="Kiilat"
+            text="Vesikaton kiilat saatavilla EPS-, PIR- ja villaeristeistä asennusvalmiina."
+            link={{
+              url: "#",
+            }}
+          />
+        </li>
+        <li class="hidden">
+          <Card
+            title="Profiililistat"
+            text="Muotoonleikatut eristeprofiilit. Tarpeesi mukaan EPS tai villa ratkaisuilla."
+            link={{
+              url: "#",
+            }}
+          />
+        </li>
+        <li class="hidden">
+          <Card
+            title="Rappauslistat"
+            text="Julkisivujen rappauslistat kevyestä ja helppokäyttöisestä EPS:stä."
+            link={{
+              url: "#",
+            }}
+          />
+        </li>
+      </ul>
+    </section>
+    <a name="suunnittelupalvelu"></a>
+    <section class="main mt-20 px-8">
+      <div
+        class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start justify-between w-full"
+      >
+        <div>
+          <h2 class="h2 mb-3">Suunnittelupalvelu</h2>
+          <p class="w-full max-w-140">
+            Suunnittelupalvelumme auttaa sinua kaikissa vesikaton
+            kallistusratkaisuissa. Me hoidamme tuotteiden optimoinnin sinun
+            tarpeet huomioon ottaen, jotta säästät materiaalikustannuksissa.
+          </p>
+          <div class="p-5 px-7 bg-light border border-dark mt-6 w-fit pr-8">
+            <p class="font-semibold mb-1">Meiltä saat</p>
+            <ul class="list list-disc ml-6">
+              <li>Kohdekohtaiset suunnitelman</li>
+              <li>Yksityiskohtaiset asennuskuvat</li>
+              <li>Valmiiksi leikatut tuotteet työmaalle toimitettuna</li>
+            </ul>
+          </div>
+          <a href="/yhteystiedot" class="btn-primary mt-10">Ota yhteyttä</a>
+        </div>
+        <div
+          class="bg-light flex items-center justify-center font-bold h-full min-h-70"
+        >
+          Kuva tulossa
+        </div>
+      </div>
+    </section>
+  </main>
+</Layout>

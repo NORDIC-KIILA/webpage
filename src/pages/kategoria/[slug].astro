@@ -1,0 +1,176 @@
+---
+import { client } from "../../lib/sanity";
+import { PortableText } from "astro-portabletext";
+import Layout from "../../layouts/Layout.astro";
+import NotFoundLayout from "../../layouts/NotFoundLayout.astro";
+import Breadcrumb from "../../components/Breadcrumb.astro";
+import ProductCard from "../../components/ProductCard.astro";
+
+export async function getStaticPaths() {
+  const categories =
+    await client.fetch(`*[_type == "category" && defined(slug.current)]{
+    "slug": slug.current
+  }`);
+
+  return categories.map((category: any) => ({
+    params: { slug: category.slug },
+  }));
+}
+
+const { slug } = Astro.params;
+
+const category = await client.fetch(
+  `*[_type == "category" && slug.current == $slug && isHidden != true][0]{
+  title,
+  headerTitle,
+  content,
+  isHidden,
+  "slug": slug.current,
+  seo {
+    title,
+    description,
+    "imageUrl": image.asset->url,
+    noIndex,
+    canonicalUrl,
+    breadcrumbs[] { title, url }
+  },
+  "products": *[_type == "product" && references(^._id) && isHidden != true] | order(title asc) {
+    title,
+    "slug": slug.current,
+    measurements,
+    "mainImage": gallery.images[0].image.asset->url,
+    "altText": gallery.images[0].alt
+  }
+}`,
+  { slug },
+);
+
+if (!category) {
+  return Astro.redirect("/404");
+}
+
+const siteUrl = "https://nordickiila.fi";
+const pageTitle =
+  category.seo?.title ||
+  `${category.headerTitle || category.title} | Nordic Kiila`;
+const pageDescription =
+  category.seo?.description ||
+  "Nordic Kiila - Asiantuntevat vesikaton ratkaisut";
+const pageImage = category.seo?.imageUrl || `${siteUrl}/default-og-image.jpg`;
+const canonical =
+  category.seo?.canonicalUrl || `${siteUrl}/kategoria/${category.slug}`;
+const robotsContent = category.seo?.noIndex
+  ? "noindex, nofollow"
+  : "index, follow";
+
+const baseBreadcrumb = [
+  { title: "Etusivu", url: "/" },
+  { title: "Tuotteet", url: "/kaikki-tuotteet" },
+  ...(category.seo?.breadcrumbs || [
+    { title: category.title, url: `/kategoria/${category.slug}` },
+  ]),
+];
+
+const jsonLdBreadcrumbs = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: baseBreadcrumb.map((item: any, index: number) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: item.title,
+    item: `${siteUrl}${item.url}`,
+  })),
+};
+---
+
+{
+  category.isHidden ? (
+    <NotFoundLayout />
+  ) : (
+    <Layout title={pageTitle} description={pageDescription}>
+      <Fragment slot="head">
+        <meta name="robots" content={robotsContent} />
+        <link rel="canonical" href={canonical} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:image" content={pageImage} />
+        <meta property="og:url" content={canonical} />
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify(jsonLdBreadcrumbs)}
+        />
+      </Fragment>
+
+      <main class="main main-padding">
+        <Breadcrumb items={baseBreadcrumb} className="mb-8" />
+
+        <header class="mb-12">
+          <h1 class="text-4xl md:text-5xl font-bold text-dark mb-6">
+            {category.headerTitle || category.title}
+          </h1>
+
+          {category.content && (
+            <div class="max-w-none text-main prose prose-lg prose-headings:font-semibold prose-a:text-blue-700 hover:prose-a:text-blue-800">
+              <PortableText value={category.content} />
+            </div>
+          )}
+        </header>
+
+        <div class="mt-12">
+          <h2 class="text-2xl font-semibold text-main mb-6 hidden">
+            {category.title} - Tuotteet
+          </h2>
+
+          <div class="w-full border-t border-gray-200 mb-8 pt-2 px-4 flex justify-end">
+            <label>
+              Järjestä:
+              <select id="sort-select" class="ml-2 py-1 px-3 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="asc">Tuotenimi A-Ö</option>
+                <option value="desc">Tuotenimi Ö-A</option>
+              </select>
+            </label>
+          </div>
+
+          {category.products && category.products.length > 0 ? (
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {category.products.map((product: any) => (
+                <ProductCard product={product} />
+              ))}
+            </div>
+          ) : (
+            <div class="p-8 bg-gray-50 border border-gray-200 text-center">
+              <p class="text-gray-600">
+                Tälle kategorialle ei ole vielä lisätty tuotteita.
+              </p>
+            </div>
+          )}
+        </div>
+      </main>
+
+      <script>
+        const select = document.getElementById('sort-select');
+        const grid = document.getElementById('product-grid');
+
+        if (select && grid) {
+          select.addEventListener('change', (e) => {
+            const cards = Array.from(grid.children);
+            const direction = e.target.value;
+
+            cards.sort((a, b) => {
+              const titleA = a.querySelector('h3').textContent.trim();
+              const titleB = b.querySelector('h3').textContent.trim();
+              
+              if (direction === 'asc') {
+                return titleA.localeCompare(titleB, 'fi');
+              } else {
+                return titleB.localeCompare(titleA, 'fi');
+              }
+            });
+
+            cards.forEach(card => grid.appendChild(card));
+          });
+        }
+      </script>
+    </Layout>
+  )
+}

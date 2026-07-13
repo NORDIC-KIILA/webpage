@@ -1,0 +1,37 @@
+---
+export interface Props {
+  title: string;
+  image?: string;
+  text: string;
+  link: {
+    url: string;
+  };
+}
+
+const { title, image, text, link } = Astro.props;
+---
+
+<article
+  class="flex flex-col bg-light border border-dark overflow-hidden duration-200 h-full"
+>
+  {
+    image ? (
+      <img src={image} alt={title} class="w-full h-48 object-cover" />
+    ) : (
+      <div class="w-full h-48 bg-dark flex items-center justify-center font-bold text-white">
+        Kuva tulossa
+      </div>
+    )
+  }
+  <div class="flex flex-col flex-grow p-6">
+    <h3 class="h3 mb-3">{title}</h3>
+    <p class="text-main flex-grow mb-6">{text}</p>
+    {
+      link && (
+        <a href={link.url} class="btn-secondary w-fit mt-auto">
+          Lue lisää
+        </a>
+      )
+    }
+  </div>
+</article>

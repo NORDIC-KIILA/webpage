@@ -1,0 +1,383 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-main: "Montserrat", sans-serif;
+  --font-heading: "Alumni Sans", sans-serif;
+  --color-main: #333333;
+  --color-dark: #023047;
+  --color-dark-green: #32814d;
+  --color-light: #ecf4f6;
+  --color-accent: #5abf7e;
+  --color-btn-accent-hover: #93f8b3;
+}
+
+@utility main {
+  @apply w-full max-w-350 mx-auto;
+}
+
+@utility main-padding {
+  @apply px-4 pt-8 md:pt-12;
+}
+
+@utility h1 {
+  @apply font-heading text-[4rem] font-bold text-dark leading-tight;
+}
+
+@utility h2 {
+  @apply font-heading text-[3rem] font-bold text-dark leading-tight uppercase;
+}
+
+@utility h3 {
+  @apply font-heading text-[2rem] font-bold text-dark leading-tight;
+}
+
+@utility bg-grid {
+  @apply absolute inset-0 h-full w-full bg-white;
+  background-image:
+    linear-gradient(to right, #80808012 1px, transparent 1px),
+    linear-gradient(to bottom, #80808012 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+@utility bg-dot {
+  @apply absolute inset-0 h-full w-full bg-white;
+  background-image: radial-gradient(#e6e6e6 1.3px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+@utility btn-primary {
+  @apply inline-flex cursor-pointer items-center justify-center bg-accent px-6 py-3 font-main font-semibold text-black transition-colors hover:bg-btn-accent-hover focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+@utility btn-secondary {
+  @apply inline-flex cursor-pointer items-center justify-center bg-dark px-5 py-2 font-main font-normal text-white transition-colors hover:bg-accent hover:text-black focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+/* FONTS */
+/* ALUMNI SANS*/
+/* alumni-sans-100 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: normal;
+  font-weight: 100;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-100.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-100italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: italic;
+  font-weight: 100;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-100italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-200 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: normal;
+  font-weight: 200;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-200.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-200italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: italic;
+  font-weight: 200;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-200italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-300 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: normal;
+  font-weight: 300;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-300.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-300italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: italic;
+  font-weight: 300;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-300italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-regular.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: italic;
+  font-weight: 400;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-500 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-500.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-500italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: italic;
+  font-weight: 500;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-500italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-600 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: normal;
+  font-weight: 600;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-600.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-600italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: italic;
+  font-weight: 600;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-600italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-700.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-700italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: italic;
+  font-weight: 700;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-700italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-800 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: normal;
+  font-weight: 800;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-800.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-800italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: italic;
+  font-weight: 800;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-800italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-900 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: normal;
+  font-weight: 900;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-900.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* alumni-sans-900italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Alumni Sans";
+  font-style: italic;
+  font-weight: 900;
+  src: url("/fonts/alumni-sans-v20-latin/alumni-sans-v20-latin-900italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+
+/* MONTSERRAT */
+/* montserrat-100 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 100;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-100.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-100italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 100;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-100italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-200 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 200;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-200.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-200italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 200;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-200italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-300 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 300;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-300.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-300italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 300;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-300italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-regular - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-regular.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 400;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-500 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-500.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-500italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 500;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-500italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-600 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 600;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-600.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-600italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 600;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-600italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-700 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 700;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-700.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-700italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 700;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-700italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-800 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 800;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-800.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-800italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 800;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-800italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-900 - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 900;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-900.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
+/* montserrat-900italic - latin */
+@font-face {
+  font-display: swap; /* Check https://developer.mozilla.org/en-US/docs/Web/CSS/@font-face/font-display for other options. */
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 900;
+  src: url("/fonts/montserrat-v31-latin/montserrat-v31-latin-900italic.woff2")
+    format("woff2"); /* Chrome 36+, Opera 23+, Firefox 39+, Safari 12+, iOS 10+ */
+}
