@@ -25,8 +25,8 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
   jobtitle,
   email,
   phone,
-  image
-} | order(name asc)`);
+  "sortOrder": order
+} | order(sortOrder asc, name asc)`);
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -385,6 +385,7 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
       }
 
       productsContainer.innerHTML = `
+        <p class="text-sm font-medium text-dark mb-1">Valitse tuote/tuotteet</p>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-1">
           ${category.products
             .map(

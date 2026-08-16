@@ -2,10 +2,14 @@
 import { client } from "../lib/sanity";
 
 const categories =
-  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current)]{
+  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current) && slug.current != "outlet"]{
   title,
   "slug": slug.current
 } | order(title asc)`);
+
+const showOutlet = await client.fetch(
+  `count(*[_type == "category" && slug.current == "outlet" && isHidden != true]) > 0`,
+);
 
 const link = "hover:text-accent duration-200";
 ---
@@ -106,7 +110,7 @@ const link = "hover:text-accent duration-200";
         </div>
       </div>
 
-      <a href="#" class={link}>Outlet</a>
+      {showOutlet && <a href="/kategoria/outlet" class={link}>Outlet</a>}
       <a href="/#suunnittelupalvelu" class={link}>Suunnittelupalvelu</a>
       <a href="/yhteystiedot" class="btn-primary">Ota yhteyttä</a>
     </div>
@@ -179,11 +183,16 @@ const link = "hover:text-accent duration-200";
         ))
       }
 
-      <a
-        href="#"
-        class="block py-3 px-2 mt-4 hover:text-accent focus:outline-none focus:text-accent transition-colors"
-        >Outlet</a
-      >
+      {
+        showOutlet && (
+          <a
+            href="/kategoria/outlet"
+            class="block py-3 px-2 mt-4 hover:text-accent focus:outline-none focus:text-accent transition-colors"
+          >
+            Outlet
+          </a>
+        )
+      }
       <a
         href="/#suunnittelupalvelu"
         class="block py-3 px-2 hover:text-accent focus:outline-none focus:text-accent transition-colors"

@@ -2,10 +2,14 @@
 import { client } from "../lib/sanity";
 
 const categories =
-  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current)]{
+  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current) && slug.current != "outlet"]{
   title,
   "slug": slug.current
 } | order(title asc)`);
+
+const showOutlet = await client.fetch(
+  `count(*[_type == "category" && slug.current == "outlet" && isHidden != true]) > 0`,
+);
 
 const link = "hover:underline";
 ---
@@ -69,10 +73,9 @@ const link = "hover:underline";
         >Nordic Kiila</a
       >
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua.
+        Asiantuntevat ja räätälöidyt vesikaton ratkaisut juuri sinun
+        kohteellesi.
       </p>
-      <div class="mt-3">Sosiaalisen median kuvakkeet</div>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 w-fit gap-8 md:gap-4 lg:gap-20">
       <div>
@@ -97,9 +100,22 @@ const link = "hover:underline";
               </li>
             ))
           }
-          <li class={link}><a href="#">Outlet-tuotteet</a></li>
         </ul>
       </div>
+      {
+        showOutlet && (
+          <div>
+            <h2 class="font-bold text-md uppercase tracking-wider mb-3">
+              Outlet
+            </h2>
+            <ul class="flex flex-col gap-2">
+              <li class={link}>
+                <a href="/kategoria/outlet">Outlet-tuotteet</a>
+              </li>
+            </ul>
+          </div>
+        )
+      }
       <div>
         <h2 class="font-bold text-md uppercase tracking-wider mb-3">Meistä</h2>
         <ul class="flex flex-col gap-2">
@@ -107,13 +123,6 @@ const link = "hover:underline";
             <a href="/#suunnittelupalvelu">Suunnittelupalvelu</a>
           </li>
           <li class={link}><a href="/yhteystiedot">Yhteystiedot</a></li>
-        </ul>
-      </div>
-      <div>
-        <h2 class="font-bold text-md uppercase tracking-wider mb-3">Muut</h2>
-        <ul class="flex flex-col gap-2">
-          <li class={link}><a href="/">Evästeasetukset</a></li>
-          <li class={link}><a href="/">Tietosuojalauseke</a></li>
         </ul>
       </div>
     </div>

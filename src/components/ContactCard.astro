@@ -1,33 +1,15 @@
 ---
-import { urlFor } from "../lib/sanity";
-
 export interface Props {
   name: string;
   jobtitle?: string;
   email?: string;
   phone?: string;
-  image?: any;
 }
 
-const { name, jobtitle, email, phone, image } = Astro.props;
+const { name, jobtitle, email, phone } = Astro.props;
 ---
 
 <div class="flex flex-col gap-2">
-  <div class="flex items-center gap-3">
-    {
-      image ? (
-        <img
-          src={urlFor(image).width(80).height(80).url()}
-          alt={name}
-          class="w-16 h-16 rounded-full object-cover"
-        />
-      ) : (
-        <!-- <div class="w-full h-60 bg-dark/10 flex items-center justify-center text-dark/40 font-bold text-xl">
-          {name.charAt(0)}
-        </div> -->
-      )
-    }
-  </div>
   <div class="flex flex-col gap-1 mt-2">
     <div class="mb-3">
       <h3 class="font-bold text-dark text-xl">{name}</h3>
@@ -55,43 +37,3 @@ const { name, jobtitle, email, phone, image } = Astro.props;
     }
   </div>
 </div>
-
-<!-- V1 <div class="bg-light border border-dark/10 rounded p-4 flex flex-col gap-2">
-  <div class="flex items-center gap-3">
-    {
-      image ? (
-        <img
-          src={urlFor(image).width(80).height(80).url()}
-          alt={name}
-          class="w-16 h-16 rounded-full object-cover"
-        />
-      ) : (
-        <div class="w-16 h-16 rounded-full bg-dark/10 flex items-center justify-center text-dark/40 font-bold text-xl">
-          {name.charAt(0)}
-        </div>
-      )
-    }
-    <div>
-      <h3 class="font-semibold text-dark">{name}</h3>
-      {jobtitle && <p class="text-sm text-gray-600">{jobtitle}</p>}
-    </div>
-  </div>
-  <div class="flex flex-col gap-1 mt-2">
-    {phone && (
-      <a
-        href={`tel:${phone}`}
-        class="text-sm text-dark hover:text-accent transition-colors"
-      >
-        {phone}
-      </a>
-    )}
-    {email && (
-      <a
-        href={`mailto:${email}`}
-        class="text-sm text-dark hover:text-accent transition-colors"
-      >
-        {email}
-      </a>
-    )}
-  </div>
-</div> -->

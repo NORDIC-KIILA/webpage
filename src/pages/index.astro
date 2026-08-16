@@ -4,7 +4,7 @@ import Card from "../components/Card.astro";
 import { client } from "../lib/sanity";
 
 const categories =
-  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current)]{
+  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current) && slug.current != "outlet"]{
   title,
   "slug": slug.current,
   seo {
@@ -66,7 +66,7 @@ const robotsContent = "index, follow";
             <li>
               <Card
                 title={cat.title}
-                text={cat.seo.description}
+                text={cat.seo?.description}
                 image={cat.seo?.imageUrl}
                 link={{
                   url: `/kategoria/${cat.slug}`,

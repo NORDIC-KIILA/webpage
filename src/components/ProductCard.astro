@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+
 export interface Props {
   product: {
     title: string;
@@ -19,9 +21,11 @@ const { product } = Astro.props;
   <div class="aspect-4/3 bg-gray-100 overflow-hidden relative">
     {
       product.mainImage ? (
-        <img
+        <Image
           src={product.mainImage}
           alt={product.altText || product.title}
+          width={600}
+          height={450}
           class="w-full h-full object-cover"
         />
       ) : (

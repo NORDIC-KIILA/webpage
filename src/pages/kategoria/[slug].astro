@@ -30,9 +30,7 @@ const category = await client.fetch(
     title,
     description,
     "imageUrl": image.asset->url,
-    noIndex,
-    canonicalUrl,
-    breadcrumbs[] { title, url }
+    noIndex
   },
   "products": *[_type == "product" && references(^._id) && isHidden != true] | order(title asc) {
     title,
@@ -57,8 +55,7 @@ const pageDescription =
   category.seo?.description ||
   "Nordic Kiila - Asiantuntevat vesikaton ratkaisut";
 const pageImage = category.seo?.imageUrl || `${siteUrl}/default-og-image.jpg`;
-const canonical =
-  category.seo?.canonicalUrl || `${siteUrl}/kategoria/${category.slug}`;
+const canonical = `${siteUrl}/kategoria/${category.slug}`;
 const robotsContent = category.seo?.noIndex
   ? "noindex, nofollow"
   : "index, follow";
@@ -66,9 +63,7 @@ const robotsContent = category.seo?.noIndex
 const baseBreadcrumb = [
   { title: "Etusivu", url: "/" },
   { title: "Tuotteet", url: "/kaikki-tuotteet" },
-  ...(category.seo?.breadcrumbs || [
-    { title: category.title, url: `/kategoria/${category.slug}` },
-  ]),
+  { title: category.title, url: `/kategoria/${category.slug}` },
 ];
 
 const jsonLdBreadcrumbs = {
@@ -139,9 +134,16 @@ const jsonLdBreadcrumbs = {
             </div>
           ) : (
             <div class="p-8 bg-gray-50 border border-gray-200 text-center">
-              <p class="text-gray-600">
-                Tälle kategorialle ei ole vielä lisätty tuotteita.
-              </p>
+              {slug !== "outlet" && (
+                <p class="text-gray-600">
+                  Tälle kategorialle ei ole vielä lisätty tuotteita.
+                </p>
+              )}
+              {slug === "outlet" && (
+                <p class="text-gray-600">
+                  Tällä hetkellä outlet varastomme on tyhjä. Lisäämme tuotteita sitä mukaan, kun niitä tulee saataville.
+                </p>
+              )}
             </div>
           )}
         </div>

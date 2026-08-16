@@ -1,6 +1,7 @@
 ---
 import { client, urlFor } from "../../lib/sanity";
 import { PortableText } from "astro-portabletext";
+import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
 import Breadcrumb from "../../components/Breadcrumb.astro";
 import ProductTable from "../../components/ProductTable.astro";
@@ -44,9 +45,7 @@ const product = await client.fetch(
     title,
     description,
     "imageUrl": image.asset->url,
-    noIndex,
-    canonicalUrl,
-    breadcrumbs[] { title, url }
+    noIndex
   }
 }`,
   { slug },
@@ -64,13 +63,12 @@ const pageDescription =
 const mainImage = product.gallery?.images?.[0]?.url;
 const pageImage =
   product.seo?.imageUrl || mainImage || `${siteUrl}/default-og-image.jpg`;
-const canonical =
-  product.seo?.canonicalUrl || `${siteUrl}/tuotteet/${product.slug}`;
+const canonical = `${siteUrl}/tuotteet/${product.slug}`;
 const robotsContent = product.seo?.noIndex
   ? "noindex, nofollow"
   : "index, follow";
 
-const breadcrumbs = product.seo?.breadcrumbs || [
+const breadcrumbs = [
   { title: "Etusivu", url: "/" },
   {
     title: product.category?.title || "Tuotteet",
@@ -129,9 +127,11 @@ const btnInactiveClass =
               data-type="image"
               class="block aspect-video w-full overflow-hidden border border-gray-200 bg-gray-100"
             >
-              <img
+              <Image
                 src={mainImage}
                 alt={product.gallery.images[0].alt || product.title}
+                width={1200}
+                height={675}
                 class="w-full h-full object-cover cursor-zoom-in hover:opacity-90 transition-opacity"
               />
             </a>
@@ -164,9 +164,11 @@ const btnInactiveClass =
                   data-type="image"
                   class="block aspect-square overflow-hidden border border-gray-200 bg-gray-100 cursor-zoom-in hover:opacity-80 transition-opacity"
                 >
-                  <img
+                  <Image
                     src={img.url}
                     alt={img.alt || product.title}
+                    width={300}
+                    height={300}
                     class="w-full h-full object-cover"
                   />
                 </a>
