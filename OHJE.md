@@ -118,66 +118,19 @@ Sanity Studio julkaistaan Sanityn omaan hostingiin ja studio avautuu osoitteesta
 
 ---
 
-## 8. Sivuston automaattinen uudelleenrakennus, kun sisältöä muokataan
+## 8. Sivuston manuaalinen uudelleenrakennus, kun sisältöä muokataan
 
 Koska sivusto on staattinen, Sanityssa tehdyt sisältömuutokset näkyvät vasta, kun Netlify rakentaa sivuston uudelleen. Tätä varten Sanityssa on oma nappi, jolla manuaalisesti käynnistetään build.
 
-### Vaihe A: Build hookin luominen Netlifyssä
+### Build hookin luominen Netlifyssä
 
 1. Netlify:ssä: **Project configuration** → **Build & deploy**
 2. Etsi kohta **Build hooks** → **Add build hook**
 3. **Name:** esim. `Manual deploy`
 4. **Branch to build:** `main`
 5. Tallenna ja **kopioi generoitu URL** (muotoa `https://api.netlify.com/build_hooks/...`)
-
-### Vaihe B: Deploy-painikkeen lisääminen Sanity Studioon
-
-Sanity Studioon lisätään **Dashboard**-näkymä, jossa on **Deploy**-painike sivuston uudelleenrakentamista varten. Tätä varten tarvitaan kolme tietoa Netlifystä:
-
-1. **Build hook ID:** vaiheessa A kopioimastasi osoitteesta — se on URL:n viimeinen osa (muotoa `https://api.netlify.com/build_hooks/<tämä-on-id>`)
-2. **API ID:** Netlifyssä **Site configuration** → **General** → **Site details** → **Site information** → **API ID**
-3. **Site name:** Netlifyssä **Site configuration** → **General** → **Site details** → **Site name**
-
-Joko kehittäjä tai sinä itse voit lisätä ne projektiin. Jos hoidat tämän itse, lisää `studio-nordic-kiila-website/sanity.config.ts`-tiedostoon seuraavat rivit (korvaa `<...>`-kohdat Netlifystä saamillasi arvoilla):
-
-```ts
-import { dashboardTool } from "@sanity/dashboard";
-import { netlifyWidget } from "sanity-plugin-dashboard-widget-netlify";
-
-export default defineConfig({
-  // ...muut asetukset ennallaan...
-  plugins: [
-    structureTool(),
-    visionTool(),
-    dashboardTool({
-      widgets: [
-        netlifyWidget({
-          title: "Netlify deploys",
-          sites: [
-            {
-              title: "Nordic Kiila Website",
-              apiId: "<NETLIFY_API_ID>",
-              buildHookId: "<BUILD_HOOK_ID>",
-              name: "<NETLIFY_SITE_NAME>",
-              url: "https://nordickiila.fi",
-              branch: "main",
-            },
-          ],
-        }),
-      ],
-    }),
-  ],
-});
-```
-
-Lopuksi julkaistaan päivitetty Studio:
-
-```bash
-cd studio-nordic-kiila-website
-npm run deploy
-```
-
-Tämän jälkeen Sanity Studiossa näkyy **Dashboard**-näkymä, josta sivuston voi rakentaa uudelleen yhdellä painalluksella. Buildin tila näkyy widgetissä reaaliajassa.
+6. Etsi kohta **Project configuration** → **General** → **Project details** → **Project information** ja kopioi **Project ID** ja **Project name**.
+7. Lähetä nämä kolme tietoa kehittäjälle, jotta Sanity Studio Dashboard-näkymään saadaan lisättyä Deploy painike.
 
 ---
 
