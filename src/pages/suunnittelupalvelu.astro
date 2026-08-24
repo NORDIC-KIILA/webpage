@@ -1,0 +1,307 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Breadcrumb from "../components/Breadcrumb.astro";
+
+const siteUrl = "https://nordickiila.fi";
+const pageTitle = "Suunnittelupalvelu";
+const pageDescription =
+  "Suunnittelemme vesikaton kallistusratkaisut kohteeseesi: kohdekohtaiset suunnitelmat, asennuskuvat ja valmiiksi leikatut tuotteet toimitettuna suoraan työmaalle.";
+const pageImage = `${siteUrl}/default-og-image.jpg`;
+const canonical = `${siteUrl}/suunnittelupalvelu`;
+const robotsContent = "index, follow";
+
+const baseBreadcrumb = [
+  { title: "Etusivu", url: "/" },
+  { title: "Suunnittelupalvelu" },
+];
+
+const jsonLdBreadcrumbs = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: baseBreadcrumb.map((item: any, index: number) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    name: item.title,
+    item: `${siteUrl}${item.url}`,
+  })),
+};
+
+const features = [
+  {
+    title: "Lähtötiedot",
+    text: "Käymme läpi kohteen, vesikaton muodot, kallistukset ja muut suunnitteluun vaikuttavat tarpeet.",
+  },
+  {
+    title: "Materiaalin valinta",
+    text: "Valmistamme ratkaisuja eri käyttökohteisiin EPS-, PIR- ja villamateriaaleista. Autamme valitsemaan kohteeseesi sopivan materiaalin.",
+  },
+  {
+    title: "Suunnittelu ja optimointi",
+    text: "Suunnittelemme kohdekohtaisen ratkaisun ja optimoimme tuotteiden mitoituksen materiaalihukan minimoimiseksi.",
+  },
+  {
+    title: "Yksityiskohtaiset asennuskuvat",
+    text: "Saat yksityiskohtaiset kuvat, joiden avulla tuotteiden asentaminen työmaalla on selkeää.",
+  },
+  {
+    title: "Valmiiksi leikatut tuotteet",
+    text: "Valmistamme räätälöidyt kiilat, profiilit ja rappauslistat valmiiksi mittoihinsa.",
+  },
+  {
+    title: "Toimitus suoraan työmaalle",
+    text: "Saat tuotteet valmiiksi pakattuina ja kohteeseen toimitettuna, jolloin työmaalla säästyy aikaa ja ylimääräisiä työvaiheita.",
+  },
+];
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <Fragment slot="head">
+    <meta name="robots" content={robotsContent} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:image" content={pageImage} />
+    <meta property="og:url" content={canonical} />
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLdBreadcrumbs)}
+    />
+  </Fragment>
+
+  <main class="main main-padding">
+    <Breadcrumb items={baseBreadcrumb} className="mb-8 px-1 md:px-5" />
+
+    <section
+      class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-20 items-center px-1 md:px-5 mb-16 lg:mb-25"
+    >
+      <div>
+        <h1 class="h1 mb-3">Suunnittelupalvelu</h1>
+        <p class="font-heading text-3xl font-semibold text-dark mb-6 max-w-120">
+          Kattoratkaisu suunniteltuna juuri sinun kohteeseesi
+        </p>
+        <p class="text-lg max-w-140 mb-8">
+          Vesikaton kallistusten ja erilaisten korkojen suunnittelu voi olla
+          haastava osa rakennusprojektia. Me teemme siitä helppoa.
+          Suunnittelemme ratkaisut aina kohdekohtaisesti, jotta materiaalit
+          hyödynnetään mahdollisimman tehokkaasti ja kokonaisuus toimii
+          työmaalla suunnitellusti.
+        </p>
+        <div class="flex flex-col md:flex-row gap-4">
+          <a href="/yhteystiedot" class="btn-primary">Pyydä tarjous</a>
+          <a href="#palvelun-kulku" class="btn-secondary">Näin palvelu etenee</a
+          >
+        </div>
+      </div>
+      <div
+        class="bg-light flex items-center justify-center font-bold text-dark h-full min-h-70"
+      >
+        Kuva tulossa
+      </div>
+    </section>
+
+    <section class="px-1 md:px-5 mb-16 lg:mb-25">
+      <div
+        class="bg-light p-8 md:p-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center"
+      >
+        <div
+          class="bg-white border flex items-center justify-center font-bold text-dark h-full min-h-60 order-last lg:order-first"
+        >
+          Kuva tulossa
+        </div>
+        <div>
+          <h2 class="h2 mb-4">Säästä materiaalia, aikaa ja kustannuksia</h2>
+          <p class="text-lg">
+            Hyvin suunniteltu kattoratkaisu vähentää turhaa materiaalinkulutusta
+            ja helpottaa asennustyötä. Optimoimme tuotteiden mitoituksen
+            kohteesi lähtötietojen perusteella ja huomioimme suunnittelussa sekä
+            tekniset vaatimukset että materiaalitehokkuuden.
+          </p>
+          <p class="text-lg mt-4 font-semibold text-dark">
+            Lopputuloksena saat tarkasti suunnitellut tuotteet, jotka on
+            valmistettu valmiiksi kohteeseesi.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section
+      class="px-3 md:px-5 mb-16 lg:mb-25 flex flex-col md:flex-row justify-center items-start gap-10 md:gap-15 relative"
+      id="palvelun-kulku"
+    >
+      <div class="relative md:sticky md:top-10 md:self-start md:max-w-130">
+        <h2 class="h2 mb-3">Näin palvelu etenee</h2>
+        <p class="max-w-140">
+          Selkeä prosessi suunnittelusta valmiisiin tuotteisiin – sinä tiedät
+          aina, missä vaiheessa mennään.
+        </p>
+      </div>
+
+      <div class="flex flex-row gap-7 lg:gap-12">
+        <div
+          class="relative w-1.5 shrink-0 self-stretch bg-accent"
+          aria-hidden="true"
+        >
+          <div
+            id="progress-bar"
+            class="absolute top-0 left-0 w-full bg-dark"
+            style="height: 0%"
+          >
+          </div>
+          {
+            features.map((f, i) => (
+              <div
+                id={`check-${i + 1}`}
+                class="check-node absolute left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full border-2 border-dark flex items-center justify-center shadow-lg text-white transition-colors duration-500 bg-white"
+                style={`top: ${((i + 1) / (features.length + 1)) * 100}%`}
+                aria-hidden="true"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  class="check-icon h-4 w-4 transition-opacity duration-300 opacity-0"
+                  fill="currentColor"
+                  viewBox="0 0 256 256"
+                >
+                  <path d="M243.31,90.91l-128.4,128.4a16,16,0,0,1-22.62,0l-71.62-72a16,16,0,0,1,0-22.61l20-20a16,16,0,0,1,22.58,0L104,144.22l96.76-95.57a16,16,0,0,1,22.59,0l19.95,19.54A16,16,0,0,1,243.31,90.91Z" />
+                </svg>
+              </div>
+            ))
+          }
+        </div>
+        <ul id="step-list" class="relative flex flex-col gap-20 max-w-140">
+          {
+            features.map((f, i) => (
+              <li data-step={i + 1}>
+                <article class="h-full p-0 md:p-2 pt-0 flex flex-row items-start gap-2 md:gap-4">
+                  <span
+                    class="h-8 w-8 flex items-center justify-center text-2xl text-dark font-bold bg-white mt-0 md:mt-1 shrink-0"
+                    aria-hidden="true"
+                  >
+                    {i + 1}.
+                  </span>
+                  <div>
+                    <h3 class="h3">{f.title}</h3>
+                    <p class="text-main flex-grow">{f.text}</p>
+                  </div>
+                </article>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+
+    <section class="px-1 md:px-5 mb-10">
+      <div
+        class="bg-dark text-white p-8 md:p-12 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 lg:gap-12"
+      >
+        <div class="max-w-180">
+          <h2 class="h2 text-white mb-3">
+            Sinä rakennat – me huolehdimme kattoratkaisusta
+          </h2>
+          <p class="text-lg">
+            Kun suunnittelu, optimointi ja valmistus tulevat samasta paikasta,
+            kokonaisuus on helpompi hallita. Saat kohteeseesi sopivat tuotteet
+            valmiiksi suunniteltuna ja mitoitettuna ilman turhaa
+            materiaalihukkaa.
+          </p>
+        </div>
+        <div
+          class="flex flex-col items-start lg:items-center gap-4 w-full lg:w-fit"
+        >
+          <p
+            class="font-heading text-3xl font-semibold leading-tight text-left lg:text-center"
+          >
+            Pyydä suunnittelusta tarjous ja kerro meille kohteestasi.
+          </p>
+          <a href="/yhteystiedot" class="btn-primary w-fit">Ota yhteyttä</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const section = document.getElementById("palvelun-kulku");
+    const list = document.getElementById("step-list");
+    const progressBar = document.getElementById("progress-bar");
+    const checkNodes = Array.from(section.querySelectorAll(".check-node"));
+    const items = Array.from(list.querySelectorAll("li[data-step]"));
+    const startOffset = 0.2; // 0 = bar starts immediately, 0.5 = bar starts at halfway
+    const endOffset = 0.3; // 0 = bar full when section fully scrolled, 0.5 = bar full when section bottom is halfway up the screen
+    const checkPositions = [];
+    let ticking = false;
+
+    function updatePositions() {
+      const total = list.offsetHeight || 1;
+      items.forEach((item, i) => {
+        const span = item.querySelector("span");
+        const top = span
+          ? span.offsetTop + span.offsetHeight / 2
+          : item.offsetTop + 24;
+        const pct = Math.min(97, Math.max(3, (top / total) * 100));
+        checkPositions[i] = pct;
+        checkNodes[i].style.top = `${pct}%`;
+      });
+    }
+
+    function getProgress() {
+      const rect = section.getBoundingClientRect();
+      const total = rect.height + window.innerHeight;
+      if (total <= 0) return 0;
+      const scroll = Math.min(
+        1,
+        Math.max(0, (window.innerHeight - rect.top) / total),
+      );
+      const end = Math.min(
+        1,
+        Math.max(0, 1 - (endOffset * window.innerHeight) / total),
+      );
+      if (end <= startOffset) return 0;
+      return Math.min(
+        1,
+        Math.max(0, (scroll - startOffset) / (end - startOffset)),
+      );
+    }
+
+    function updateProgress() {
+      progressBar.style.height = `${getProgress() * 100}%`;
+    }
+
+    function updateChecks() {
+      const progressPct = getProgress() * 100;
+      items.forEach((item, i) => {
+        const node = checkNodes[i];
+        if (!node) return;
+        const icon = node.querySelector(".check-icon");
+        if (progressPct >= checkPositions[i]) {
+          node.classList.remove("bg-white");
+          node.classList.add("bg-dark");
+          if (icon) icon.classList.remove("opacity-0");
+        } else {
+          node.classList.remove("bg-dark");
+          node.classList.add("bg-white");
+          if (icon) icon.classList.add("opacity-0");
+        }
+      });
+    }
+
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateProgress();
+        updateChecks();
+        ticking = false;
+      });
+    }
+
+    updatePositions();
+    updateProgress();
+    updateChecks();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", () => {
+      updatePositions();
+      updateProgress();
+      updateChecks();
+    });
+  </script>
+</Layout>

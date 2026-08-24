@@ -110,8 +110,14 @@ const link = "hover:text-accent duration-200";
         </div>
       </div>
 
-      {showOutlet && <a href="/kategoria/outlet" class={link}>Outlet</a>}
-      <a href="/#suunnittelupalvelu" class={link}>Suunnittelupalvelu</a>
+      {
+        showOutlet && (
+          <a href="/kategoria/outlet" class={link}>
+            Outlet
+          </a>
+        )
+      }
+      <a href="/suunnittelupalvelu" class={link}>Suunnittelupalvelu</a>
       <a href="/yhteystiedot" class="btn-primary">Ota yhteyttä</a>
     </div>
   </div>
@@ -194,7 +200,7 @@ const link = "hover:text-accent duration-200";
         )
       }
       <a
-        href="/#suunnittelupalvelu"
+        href="/suunnittelupalvelu"
         class="block py-3 px-2 hover:text-accent focus:outline-none focus:text-accent transition-colors"
         >Suunnittelupalvelu</a
       >

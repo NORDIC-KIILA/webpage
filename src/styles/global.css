@@ -20,15 +20,15 @@
 }
 
 @utility h1 {
-  @apply font-heading text-[4rem] font-bold text-dark leading-tight;
+  @apply font-heading text-[3rem] md:text-[4rem] font-bold text-dark leading-tight;
 }
 
 @utility h2 {
-  @apply font-heading text-[3rem] font-bold text-dark leading-tight uppercase;
+  @apply font-heading text-[2.5rem] md:text-[3rem] font-bold text-dark leading-10 md:leading-tight uppercase;
 }
 
 @utility h3 {
-  @apply font-heading text-[2rem] font-bold text-dark leading-tight;
+  @apply font-heading text-[2rem] font-bold text-dark leading-8 mb-2 md:mb-0 md:leading-tight;
 }
 
 @utility bg-grid {
@@ -50,7 +50,7 @@
 }
 
 @utility btn-secondary {
-  @apply inline-flex cursor-pointer items-center justify-center bg-dark px-5 py-2 font-main font-normal text-white transition-colors hover:bg-accent hover:text-black focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply inline-flex cursor-pointer items-center justify-center bg-dark px-6 py-3 font-main font-medium text-white transition-colors hover:bg-accent hover:text-black focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed;
 }
 
 /* FONTS */
