@@ -92,6 +92,11 @@ const jsonLdBreadcrumbs = {
 
 const thumbnailImages = product.gallery?.images?.slice(1) || [];
 
+const contactHref =
+  product.category?.slug === "outlet"
+    ? `/yhteystiedot?outlet=${product.slug}`
+    : "/yhteystiedot";
+
 // Tab buttons
 const btnActiveClass =
   "tab-btn relative border-dark text-white bg-dark whitespace-nowrap py-3 px-5 border font-medium text-base cursor-pointer hover:shadow-md hover:shadow-gray-300 transition-shadow duration-200";
@@ -225,7 +230,7 @@ const btnInactiveClass =
         }
 
         <a
-          href={`/yhteystiedot?${product.category.slug}=${product.slug}`}
+          href={contactHref}
           class="btn-primary mt-3 md:mt-5 text-center md:text-left"
           >Pyydä kohdekohtainen suunnitelma ja tarjous</a
         >

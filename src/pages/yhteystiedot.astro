@@ -10,7 +10,7 @@ const pageImage = "/images/og-image.jpg";
 const canonical = "https://nordic-kiila.fi/yhteystiedot";
 const robotsContent = "index, follow";
 
-const categories =
+const categories = (
   await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current)]{
   title,
   "slug": slug.current,
@@ -18,7 +18,8 @@ const categories =
     title,
     "slug": slug.current
   }
-} | order(title asc)`);
+} | order(title asc)`)
+).filter((c: any) => c.slug !== "outlet" || c.products.length > 0);
 
 const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
   name,
@@ -40,7 +41,7 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
   </Fragment>
   <main class="main main-padding">
     <div
-      class="grid grid-cols-1 lg:grid-cols-2 items-start justify-between gap-10 lg:gap-20 px-1 md:px-5"
+      class="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[auto_1fr] items-start justify-between gap-10 lg:gap-20 px-1 md:px-5"
     >
       <div class="w-full col-span-1">
         <div class="mb-8">
@@ -59,7 +60,7 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
             Soita meille
           </p>
           <a
-            href="tel:+358123456789"
+            href="tel:+358407775672"
             class="text-4xl font-semibold text-dark hover:text-accent transition-colors flex items-center gap-2 font-heading"
           >
             <svg
@@ -72,9 +73,9 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
                 d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.17,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.77a16,16,0,0,0,1.32-15.06l0-.12L97.54,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.92A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.2,40.2,0,0,1,82.87,40a.61.61,0,0,0,0,.12l21,47L83.2,111.86a6.13,6.13,0,0,0-.57.77,16,16,0,0,0-1,15.7c9.06,18.53,27.73,37.06,46.46,46.11a16,16,0,0,0,15.75-1.14,8.44,8.44,0,0,0,.74-.56L168.89,152l47,21.05h0s.08,0,.11,0A40.21,40.21,0,0,1,176,208Z"
               ></path>
             </svg>
-            +358 12 345 6789
+            +358 40 777 5672
           </a>
-          <p class="text-md text-gray-600 mt-2">Soittoajat: Ma–Pe 8:00–16:00</p>
+          <p class="text-md text-gray-600 mt-2">Soittoajat: Ma–Pe 9.00–16.00</p>
         </div>
         <div
           class="text-center mx-auto mt-9 text-xl font-bold text-dark lg:hidden"
@@ -249,6 +250,84 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
             ></textarea>
           </div>
 
+          <fieldset
+            id="attachment-fieldset"
+            class="border border-dark/20 p-4 rounded mt-5 min-w-0"
+          >
+            <legend class="font-semibold text-dark px-2 text-sm">
+              Liitteet (valinnainen)
+            </legend>
+            <div id="attachment-fields" class="space-y-3">
+              {
+                Array.from({ length: 5 }, (_, i) => {
+                  const n = i + 1;
+                  return (
+                    <div
+                      id={`attachment-row-${n}`}
+                      data-name={`attachment-${n}`}
+                      class="attachment-row min-w-0 bg-[#dfeaec] border border-dark/10 rounded p-3"
+                      hidden={n > 1}
+                    >
+                      <div class="flex flex-col sm:flex-row sm:items-center gap-2 min-w-0">
+                        <label for={`attachment-${n}-input`} class="sr-only">
+                          Valitse liitetiedosto
+                        </label>
+                        <input
+                          type="file"
+                          id={`attachment-${n}-input`}
+                          name={`attachment-${n}`}
+                          accept="image/*,.pdf,.dwg,.dxf,.doc,.docx,.xls,.xlsx"
+                          class="attachment-input flex-1 min-w-0 w-full truncate text-sm text-dark file:mr-3 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-dark file:text-white file:cursor-pointer cursor-pointer hover:file:bg-accent hover:file:text-dark focus:outline-none transition-colors duration-200"
+                        />
+                        <button
+                          type="button"
+                          class="remove-attachment-btn self-end sm:self-auto shrink-0 p-1.5 text-dark/60 hover:text-dark hover:bg-dark/10 rounded transition-colors cursor-pointer"
+                          aria-label="Poista liite"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-4 w-4"
+                            aria-hidden="true"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                              clip-rule="evenodd"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+                      <div class="attachment-status flex items-center gap-2 mt-2 min-w-0 hidden">
+                        <img
+                          class="attachment-thumb h-12 w-12 rounded object-cover border border-dark/10 shrink-0"
+                          alt=""
+                        />
+                        <p class="attachment-info flex-1 min-w-0 text-xs text-gray-600 break-all" />
+                      </div>
+                    </div>
+                  );
+                })
+              }
+            </div>
+            <button
+              type="button"
+              id="add-attachment-btn"
+              class="btn-secondary mt-3 text-sm"
+            >
+              + Lisää liite
+            </button>
+            <p
+              id="attachment-size-info"
+              class="mt-3 text-sm text-gray-600"
+              role="status"
+              aria-live="polite"
+            >
+              Liitteiden maksimikoko on yhteensä 7,5 Mt.
+            </p>
+          </fieldset>
+
           <button type="submit" class="btn-primary w-full">Lähetä</button>
         </form>
       </div>
@@ -260,14 +339,19 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
     let groupCounter = 0;
     const selections = new Map();
 
+    const MAX_ATTACHMENT_BYTES = 7.5 * 1024 * 1024;
+    const attachments = new Map();
+
     function init() {
       handleUrlParams();
       setupEventListeners();
+      initAttachmentFields();
     }
 
     function handleUrlParams() {
       const params = new URLSearchParams(window.location.search);
       for (const [categorySlug, productSlug] of params) {
+        if (categorySlug !== "outlet") continue;
         const category = categoriesData.find((c) => c.slug === categorySlug);
         if (category && category.products.some((p) => p.slug === productSlug)) {
           const groupId = addSelectionGroup();
@@ -284,14 +368,34 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
           addSelectionGroup();
         });
 
+      document
+        .getElementById("add-attachment-btn")
+        .addEventListener("click", () => {
+          addAttachmentField();
+        });
+
       const form = document.querySelector('form[name="contact"]');
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        if (totalAttachmentSize() > MAX_ATTACHMENT_BYTES) {
+          document
+            .getElementById("attachment-fieldset")
+            .scrollIntoView({ behavior: "smooth", block: "center" });
+          return;
+        }
+
         const formData = new FormData(form);
+        for (const key of [...formData.keys()]) {
+          const value = formData.get(key);
+          if (value instanceof File && value.size === 0) {
+            formData.delete(key);
+          }
+        }
+
         const response = await fetch(window.location.pathname, {
           method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams(formData).toString(),
+          body: formData,
         });
         if (response.ok) {
           document.getElementById("form-container").innerHTML = `
@@ -377,7 +481,11 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
       }
 
       const category = categoriesData.find((c) => c.slug === categorySlug);
-      if (!category || !category.products.length) {
+      if (
+        !category ||
+        category.slug !== "outlet" ||
+        !category.products.length
+      ) {
         productsContainer.classList.add("hidden");
         productsContainer.innerHTML = "";
         updateProductsField();
@@ -443,10 +551,13 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
     function updateProductsField() {
       const lines = [];
       for (const [groupId, selection] of selections) {
-        if (selection.categorySlug && selection.productSlugs.size > 0) {
-          const category = categoriesData.find(
-            (c) => c.slug === selection.categorySlug,
-          );
+        if (!selection.categorySlug) continue;
+        const category = categoriesData.find(
+          (c) => c.slug === selection.categorySlug,
+        );
+        if (!category) continue;
+
+        if (selection.productSlugs.size > 0) {
           const productNames = Array.from(selection.productSlugs).map(
             (slug) => {
               const product = category.products.find((p) => p.slug === slug);
@@ -454,9 +565,106 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
             },
           );
           lines.push(`${category.title}: ${productNames.join(", ")}`);
+        } else {
+          lines.push(category.title);
         }
       }
       document.getElementById("products-field").value = lines.join("\n");
+    }
+
+    function formatBytes(bytes) {
+      if (bytes < 1024 * 1024) {
+        return `${Math.max(1, Math.round(bytes / 1024))} kt`;
+      }
+      return `${(bytes / (1024 * 1024)).toFixed(1).replace(".", ",")} Mt`;
+    }
+
+    function totalAttachmentSize() {
+      let total = 0;
+      attachments.forEach((a) => (total += a.size));
+      return total;
+    }
+
+    function updateAttachmentSizeInfo() {
+      const total = totalAttachmentSize();
+      const info = document.getElementById("attachment-size-info");
+      const over = total > MAX_ATTACHMENT_BYTES;
+      info.classList.toggle("text-red-600", over);
+      info.classList.toggle("font-semibold", over);
+      info.textContent =
+        total === 0
+          ? "Liitteiden maksimikoko on yhteensä 7,5 Mt."
+          : over
+            ? `Liitteiden yhteiskoko ${formatBytes(total)} ylittää 7,5 Mt maksimin. Poista tiedostoja jatkaaksesi.`
+            : `Liitteiden yhteiskoko: ${formatBytes(total)} / 7,5 Mt.`;
+    }
+
+    function bindAttachmentRow(row, name) {
+      const input = row.querySelector(".attachment-input");
+      const status = row.querySelector(".attachment-status");
+      const info = row.querySelector(".attachment-info");
+      const thumb = row.querySelector(".attachment-thumb");
+      let thumbUrl = null;
+      attachments.set(name, { name: "", size: 0 });
+
+      input.addEventListener("change", () => {
+        const file = input.files[0];
+        if (thumbUrl) {
+          URL.revokeObjectURL(thumbUrl);
+          thumbUrl = null;
+        }
+        if (file) {
+          attachments.set(name, { name: file.name, size: file.size });
+          info.textContent = `${file.name} (${formatBytes(file.size)})`;
+          if (file.type.startsWith("image/")) {
+            thumbUrl = URL.createObjectURL(file);
+            thumb.src = thumbUrl;
+            thumb.hidden = false;
+          } else {
+            thumb.hidden = true;
+          }
+          status.classList.remove("hidden");
+        } else {
+          attachments.set(name, { name: "", size: 0 });
+          info.textContent = "";
+          thumb.hidden = true;
+          status.classList.add("hidden");
+        }
+        updateAttachmentSizeInfo();
+      });
+
+      row
+        .querySelector(".remove-attachment-btn")
+        .addEventListener("click", () => {
+          if (thumbUrl) {
+            URL.revokeObjectURL(thumbUrl);
+            thumbUrl = null;
+          }
+          input.value = "";
+          attachments.set(name, { name: "", size: 0 });
+          info.textContent = "";
+          thumb.hidden = true;
+          status.classList.add("hidden");
+          row.hidden = true;
+          updateAttachmentSizeInfo();
+        });
+    }
+
+    function initAttachmentFields() {
+      document
+        .querySelectorAll("#attachment-fields .attachment-row")
+        .forEach((row) => {
+          bindAttachmentRow(row, row.dataset.name);
+        });
+    }
+
+    function addAttachmentField() {
+      const row = document.querySelector(
+        "#attachment-fields .attachment-row[hidden]",
+      );
+      if (row) {
+        row.hidden = false;
+      }
     }
 
     init();
