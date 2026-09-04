@@ -104,6 +104,7 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
           method="POST"
           data-netlify="true"
           netlify-honeypot="company_id"
+          enctype="multipart/form-data"
           class="space-y-4 bg-light border border-dark shadow-md px-4 md:px-10 pb-12 pt-8"
         >
           <h2
