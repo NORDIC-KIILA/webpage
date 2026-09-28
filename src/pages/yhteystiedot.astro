@@ -102,9 +102,6 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
         <form
           name="contact"
           method="POST"
-          enctype="multipart/form-data"
-          data-netlify="true"
-          netlify-honeypot="company_id"
           class="space-y-4 bg-light border border-dark shadow-md px-4 md:px-10 pb-12 pt-8"
         >
           <h2
@@ -112,7 +109,6 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
           >
             Täytä yhteydenottolomake
           </h2>
-          <input type="hidden" name="form-name" value="contact" />
 
           <div class="absolute left-[-9999px]" aria-hidden="true">
             <label for="company_id">Yritystunnus</label>
@@ -329,6 +325,15 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
             </p>
           </fieldset>
 
+          <p
+            id="form-error"
+            class="hidden text-sm text-red-600 font-semibold"
+            role="alert"
+          >
+            Lähetys epäonnistui. Yritä hetken kuluttua uudelleen tai soita
+            meille.
+          </p>
+
           <button type="submit" class="btn-primary w-full">Lähetä</button>
         </form>
       </div>
@@ -376,6 +381,9 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
         });
 
       const form = document.querySelector('form[name="contact"]');
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const errorEl = document.getElementById("form-error");
+
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -386,19 +394,74 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
           return;
         }
 
-        const formData = new FormData(form);
-        for (const key of [...formData.keys()]) {
-          const value = formData.get(key);
-          if (value instanceof File && value.size === 0) {
-            formData.delete(key);
-          }
-        }
+        submitBtn.disabled = true;
+        submitBtn.textContent = "Lähetetään…";
+        errorEl.classList.add("hidden");
 
-        const response = await fetch(window.location.pathname, {
-          method: "POST",
-          body: formData,
-        });
-        if (response.ok) {
+        try {
+          const data = new FormData(form);
+
+          const files = Array.from(
+            document.querySelectorAll(".attachment-input"),
+          )
+            .map((input) => input.files[0])
+            .filter(Boolean);
+          const fileTypes = files.map(
+            (f) => f.type || "application/octet-stream",
+          );
+
+          let attachments = [];
+          if (files.length > 0) {
+            const urlRes = await fetch("/.netlify/functions/upload-url", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                files: files.map((f, i) => ({
+                  name: f.name,
+                  type: fileTypes[i],
+                  size: f.size,
+                })),
+              }),
+            });
+            if (!urlRes.ok) throw new Error("upload-url failed");
+            const { uploads } = await urlRes.json();
+
+            await Promise.all(
+              uploads.map((u, i) =>
+                fetch(u.url, {
+                  method: "PUT",
+                  headers: { "Content-Type": fileTypes[i] },
+                  body: files[i],
+                }).then((r) => {
+                  if (!r.ok) throw new Error("file upload failed");
+                }),
+              ),
+            );
+
+            attachments = uploads.map((u, i) => ({
+              key: u.key,
+              name: files[i].name,
+              size: files[i].size,
+            }));
+          }
+
+          const res = await fetch("/.netlify/functions/submit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              firstname: data.get("firstname"),
+              lastname: data.get("lastname"),
+              company: data.get("company"),
+              phone: data.get("phone"),
+              email: data.get("email"),
+              products: data.get("products"),
+              message: data.get("message"),
+              company_id: data.get("company_id"),
+              attachments,
+            }),
+          });
+          if (!res.ok) throw new Error("submit failed");
+
           document.getElementById("form-container").innerHTML = `
             <div class="bg-light border border-accent p-8 text-center space-y-3">
               <svg class="w-12 h-12 mx-auto text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -408,6 +471,11 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
               <p>Olemme sinuun yhteydessä mahdollisimman pian.</p>
             </div>
           `;
+        } catch (err) {
+          errorEl.classList.remove("hidden");
+          errorEl.scrollIntoView({ behavior: "smooth", block: "center" });
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Lähetä";
         }
       });
     }
