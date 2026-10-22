@@ -1,9 +1,11 @@
+import {PackageIcon} from '@sanity/icons/Package'
 import {defineField, defineType} from 'sanity'
 
 export const product = defineType({
   name: 'product',
   title: 'Tuotteet',
   type: 'document',
+  icon: PackageIcon,
   fields: [
     defineField({
       name: 'title',
