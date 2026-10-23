@@ -2,13 +2,15 @@
 import { client } from "../lib/sanity";
 
 const categories =
-  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current) && slug.current != "outlet"]{
+  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current) && isOutlet != true]{
   title,
   "slug": slug.current
 } | order(title asc)`);
 
-const showOutlet = await client.fetch(
-  `count(*[_type == "category" && slug.current == "outlet" && isHidden != true]) > 0`,
+const outlet = await client.fetch(
+  `*[_type == "category" && isOutlet == true && isHidden != true && defined(slug.current)][0]{
+  "slug": slug.current
+}`,
 );
 
 const link = "hover:text-accent duration-200";
@@ -82,16 +84,6 @@ const link = "hover:text-accent duration-200";
           id="tuotteet-menu"
         >
           <ul class="py-2">
-            <li>
-              <a
-                href="/kaikki-tuotteet"
-                class="hidden px-4 py-2.5 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-colors"
-                role="menuitem"
-                tabindex="-1"
-              >
-                Kaikki tuotteet
-              </a>
-            </li>
             {
               categories.map((cat: any) => (
                 <li>
@@ -111,8 +103,8 @@ const link = "hover:text-accent duration-200";
       </div>
 
       {
-        showOutlet && (
-          <a href="/kategoria/outlet" class={link}>
+        outlet && (
+          <a href={`/kategoria/${outlet.slug}`} class={link}>
             Outlet
           </a>
         )
@@ -172,12 +164,6 @@ const link = "hover:text-accent duration-200";
       <span class="pt-4 pb-2 px-2 uppercase tracking-wider text-white/50"
         >Tuotteet</span
       >
-      <a
-        href="/kaikki-tuotteet"
-        class="hidden py-2.5 px-2 pl-4 hover:text-accent focus:outline-none focus:text-accent transition-colors"
-      >
-        Kaikki tuotteet
-      </a>
       {
         categories.map((cat: any) => (
           <a
@@ -190,9 +176,9 @@ const link = "hover:text-accent duration-200";
       }
 
       {
-        showOutlet && (
+        outlet && (
           <a
-            href="/kategoria/outlet"
+            href={`/kategoria/${outlet.slug}`}
             class="block py-3 px-2 mt-4 hover:text-accent focus:outline-none focus:text-accent transition-colors"
           >
             Outlet

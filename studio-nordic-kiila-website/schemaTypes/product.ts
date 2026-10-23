@@ -17,6 +17,8 @@ export const product = defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
+      description:
+        'Tämä on sivun osoite. Jos muutat sitä, lisää vanha osoite kohtaan Uudelleenohjaukset, jotta vanhat linkit eivät katkea.',
       options: {
         source: 'title',
         maxLength: 96,

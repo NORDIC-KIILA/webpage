@@ -9,7 +9,8 @@ export const seo = defineType({
       name: 'title',
       title: 'Meta Title',
       type: 'string',
-      description: 'Korvaa sivun oletusotsikon. Suositus: 50–60 merkkiä.',
+      description:
+        'Korvaa sivun oletusotsikon. Älä lisää | Nordic Kiila -päätettä, se lisätään automaattisesti. Suositus: 50–60 merkkiä.',
     }),
     defineField({
       name: 'description',

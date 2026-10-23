@@ -2,9 +2,10 @@
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 import { client } from "../lib/sanity";
+import { getPageSeo } from "../lib/pageSeo";
 
 const categories =
-  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current) && slug.current != "outlet"]{
+  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current) && isOutlet != true]{
   title,
   "slug": slug.current,
   seo {
@@ -13,12 +14,15 @@ const categories =
   },
 } | order(title asc)`);
 
+const seo = await getPageSeo("etusivu");
+
 const siteUrl = "https://nordickiila.fi";
-const pageTitle = "Etusivu";
-const pageDescription = "Nordic Kiila - Asiantuntevat vesikaton ratkaisut";
-const pageImage = `${siteUrl}/default-og-image.jpg`;
+const pageTitle = seo?.title || "Etusivu";
+const pageDescription =
+  seo?.description || "Nordic Kiila - Asiantuntevat vesikaton ratkaisut";
+const pageImage = seo?.imageUrl || "";
 const canonical = `${siteUrl}`;
-const robotsContent = "index, follow";
+const robotsContent = seo?.noIndex ? "noindex, nofollow" : "index, follow";
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
@@ -27,7 +31,7 @@ const robotsContent = "index, follow";
     <link rel="canonical" href={canonical} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
-    <meta property="og:image" content={pageImage} />
+    {pageImage && <meta property="og:image" content={pageImage} />}
     <meta property="og:url" content={canonical} />
   </Fragment>
   <main class="scroll-smooth">
@@ -75,33 +79,6 @@ const robotsContent = "index, follow";
             </li>
           ))
         }
-        <li class="hidden">
-          <Card
-            title="Kiilat"
-            text="Vesikaton kiilat saatavilla EPS-, PIR- ja villaeristeistä asennusvalmiina."
-            link={{
-              url: "#",
-            }}
-          />
-        </li>
-        <li class="hidden">
-          <Card
-            title="Profiililistat"
-            text="Muotoonleikatut eristeprofiilit. Tarpeesi mukaan EPS tai villa ratkaisuilla."
-            link={{
-              url: "#",
-            }}
-          />
-        </li>
-        <li class="hidden">
-          <Card
-            title="Rappauslistat"
-            text="Julkisivujen rappauslistat kevyestä ja helppokäyttöisestä EPS:stä."
-            link={{
-              url: "#",
-            }}
-          />
-        </li>
       </ul>
     </section>
     <a name="suunnittelupalvelu"></a>

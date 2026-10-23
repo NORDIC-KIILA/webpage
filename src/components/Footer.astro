@@ -2,13 +2,15 @@
 import { client } from "../lib/sanity";
 
 const categories =
-  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current) && slug.current != "outlet"]{
+  await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current) && isOutlet != true]{
   title,
   "slug": slug.current
 } | order(title asc)`);
 
-const showOutlet = await client.fetch(
-  `count(*[_type == "category" && slug.current == "outlet" && isHidden != true]) > 0`,
+const outlet = await client.fetch(
+  `*[_type == "category" && isOutlet == true && isHidden != true && defined(slug.current)][0]{
+  "slug": slug.current
+}`,
 );
 
 const link = "hover:underline";
@@ -103,14 +105,14 @@ const link = "hover:underline";
         </ul>
       </div>
       {
-        showOutlet && (
+        outlet && (
           <div>
             <h2 class="font-bold text-md uppercase tracking-wider mb-3">
               Outlet
             </h2>
             <ul class="flex flex-col gap-2">
               <li class={link}>
-                <a href="/kategoria/outlet">Outlet-tuotteet</a>
+                <a href={`/kategoria/${outlet.slug}`}>Outlet-tuotteet</a>
               </li>
             </ul>
           </div>

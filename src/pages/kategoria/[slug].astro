@@ -25,6 +25,7 @@ const category = await client.fetch(
   headerTitle,
   content,
   isHidden,
+  isOutlet,
   "slug": slug.current,
   seo {
     title,
@@ -133,12 +134,12 @@ const jsonLdBreadcrumbs = {
             </div>
           ) : (
             <div class="p-8 bg-gray-50 border border-gray-200 text-center">
-              {slug !== "outlet" && (
+              {!category.isOutlet && (
                 <p class="text-gray-600">
                   Tälle kategorialle ei ole vielä lisätty tuotteita.
                 </p>
               )}
-              {slug === "outlet" && (
+              {category.isOutlet && (
                 <p class="text-gray-600">
                   Tällä hetkellä outlet varastomme on tyhjä. Lisäämme tuotteita sitä mukaan, kun niitä tulee saataville.
                 </p>

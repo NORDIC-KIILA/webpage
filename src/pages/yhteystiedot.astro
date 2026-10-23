@@ -1,25 +1,30 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { client } from "../lib/sanity";
+import { getPageSeo } from "../lib/pageSeo";
 import ContactCard from "../components/ContactCard.astro";
 
-const pageTitle = "Ota yhteyttä";
+const seo = await getPageSeo("yhteystiedot");
+
+const pageTitle = seo?.title || "Ota yhteyttä";
 const pageDescription =
+  seo?.description ||
   "Ota yhteyttä Nordic Kiilaan ja pyydä kohdekohtainen suunnitelma ja tarjous. Täytä yhteydenottolomake, niin otamme sinuun yhteyttä mahdollisimman pian.";
-const pageImage = "/images/og-image.jpg";
+const pageImage = seo?.imageUrl || "";
 const canonical = "https://nordickiila.fi/yhteystiedot";
-const robotsContent = "index, follow";
+const robotsContent = seo?.noIndex ? "noindex, nofollow" : "index, follow";
 
 const categories = (
   await client.fetch(`*[_type == "category" && isHidden != true && defined(slug.current)]{
   title,
   "slug": slug.current,
+  isOutlet,
   "products": *[_type == "product" && isHidden != true && defined(slug.current) && references(^._id)]{
     title,
     "slug": slug.current
   }
 } | order(title asc)`)
-).filter((c: any) => c.slug !== "outlet" || c.products.length > 0);
+).filter((c: any) => !c.isOutlet || c.products.length > 0);
 
 const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
   name,
@@ -36,7 +41,7 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
     <link rel="canonical" href={canonical} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
-    <meta property="og:image" content={pageImage} />
+    {pageImage && <meta property="og:image" content={pageImage} />}
     <meta property="og:url" content={canonical} />
   </Fragment>
   <main class="main main-padding">
@@ -355,13 +360,15 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
     }
 
     function handleUrlParams() {
+      // Links from Outlet products use ?outlet=<product-slug>. The parameter
+      // name is fixed, so the Outlet category's own slug can change freely.
+      const outletCategory = categoriesData.find((c) => c.isOutlet);
+      if (!outletCategory) return;
       const params = new URLSearchParams(window.location.search);
-      for (const [categorySlug, productSlug] of params) {
-        if (categorySlug !== "outlet") continue;
-        const category = categoriesData.find((c) => c.slug === categorySlug);
-        if (category && category.products.some((p) => p.slug === productSlug)) {
+      for (const productSlug of params.getAll("outlet")) {
+        if (outletCategory.products.some((p) => p.slug === productSlug)) {
           const groupId = addSelectionGroup();
-          selectCategory(groupId, categorySlug);
+          selectCategory(groupId, outletCategory.slug);
           toggleProduct(groupId, productSlug, true);
         }
       }
@@ -552,7 +559,7 @@ const contacts = await client.fetch(`*[_type == "contact" && isHidden != true]{
       const category = categoriesData.find((c) => c.slug === categorySlug);
       if (
         !category ||
-        category.slug !== "outlet" ||
+        !category.isOutlet ||
         !category.products.length
       ) {
         productsContainer.classList.add("hidden");
